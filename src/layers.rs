@@ -305,29 +305,27 @@ impl LayersManager {
     }
 
     pub fn toggle_profile(&mut self, name: String, on: bool) {
-        let profile = self.layer_profiles.get(&name);
-        match profile {
-            Some(p) => {
-                let p = p.clone();
+        match self.layer_profiles.get(&name) {
+            Some(profile) => {
+                let profile = profile.clone();
                 if on {
-                    for index in p.clone().on_indices.iter() {
-                        let idx = index.clone();
-                        self.turn_layer_on(idx);
+                    for index in profile.clone().on_indices.iter() {
+                        self.turn_layer_on(*index);
                     }
-                    for index in p.off_indices.iter() {
+                    for index in profile.off_indices.iter() {
                         self.turn_layer_off(*index);
                     }
-                    for alias in p.on_aliases.iter() {
+                    for alias in profile.on_aliases.iter() {
                         self.turn_alias_on(alias.clone())
                     }
-                    for alias in p.off_aliases.iter() {
+                    for alias in profile.off_aliases.iter() {
                         self.turn_alias_off(alias.clone())
                     }
                 } else {
-                    for index in p.on_indices.iter() {
+                    for index in profile.on_indices.iter() {
                         self.turn_layer_off(*index)
                     }
-                    for alias in p.on_aliases.iter() {
+                    for alias in profile.on_aliases.iter() {
                         self.turn_alias_off(alias.clone())
                     }
                 }
