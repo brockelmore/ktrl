@@ -23,6 +23,22 @@
         "i_is_enter": 4,
     },
 
+    layer_profiles: [
+        "firefox": LayerProfile {
+            on_indices: [],
+            off_indices: [],
+            on_aliases: ["h_is_enter", "i_is_enter"],
+            off_aliases: ["f_is_enter", "g_is_enter"],
+        },
+        "not-firefox": LayerProfile {
+            on_indices: [],
+            off_indices: [],
+            on_aliases: ["f_is_enter", "g_is_enter"],
+            off_aliases: ["h_is_enter", "i_is_enter"],
+        },
+        ]
+    }
+
     layers: [
         // Layer 0 (Base Layer)
         //
