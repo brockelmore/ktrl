@@ -285,16 +285,56 @@ impl LayersManager {
         }
     }
 
-    // pub fn toggle_layer_profile(&mut self, name: String) {
-    //     if let Some((indexes, more_names)) = self.get_idxes_from_alias(name) {
-    //         for index in indexes.into_iter() {
-    //             self.toggle_layer(index.clone());
-    //         }
-    //         for n in more_names.iter() {
-    //             self.toggle_layer_alias(n.clone());
-    //         }
-    //     }
-    // }
+    pub fn turn_alias_on(&mut self, name: String) {
+        if let Some(index) = self.get_idx_from_alias(name) {
+            let idx = index.clone();
+            let is_layer_on = self.layers_states[idx];
+            if !is_layer_on {
+                self.turn_layer_on(idx);
+            }
+        }
+    }
+    pub fn turn_alias_off(&mut self, name: String) {
+        if let Some(index) = self.get_idx_from_alias(name) {
+            let idx = index.clone();
+            let is_layer_on = self.layers_states[idx];
+            if is_layer_on {
+                self.turn_layer_off(idx);
+            }
+        }
+    }
+
+    pub fn toggle_profile(&mut self, name: String, on: bool) {
+        let profile = self.layer_profiles.get(&name);
+        match profile {
+            Some(p) => {
+                let p = p.clone();
+                if on {
+                    for index in p.clone().on_indices.iter() {
+                        let idx = index.clone();
+                        self.turn_layer_on(idx);
+                    }
+                    for index in p.off_indices.iter() {
+                        self.turn_layer_off(*index);
+                    }
+                    for alias in p.on_aliases.iter() {
+                        self.turn_alias_on(alias.clone())
+                    }
+                    for alias in p.off_aliases.iter() {
+                        self.turn_alias_off(alias.clone())
+                    }
+                } else {
+                    for index in p.on_indices.iter() {
+                        self.turn_layer_off(*index)
+                    }
+                    for alias in p.on_aliases.iter() {
+                        self.turn_alias_off(alias.clone())
+                    }
+                }
+            }
+            _ => {}
+        }
+    }
 
     fn get_idx_from_alias(&self, name: String) -> Option<&usize> {
         self.layer_aliases.get(&name)
